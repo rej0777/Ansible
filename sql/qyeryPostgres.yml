@@ -1,0 +1,23 @@
+---
+- name: queryPG demp
+  hosts: all
+  become: true
+  vars:
+    db_name:
+  tasks:
+    - name: Utility present
+      ansible.builtin.packerage:
+        name: python3-psycopg2
+        state: present
+
+    - name: run SQL
+      community.postgresql.postgresql_query:
+        db: "{{ db_name }}"
+        query: "SELECT version()"
+      become: true
+      become_user: postgres
+      register: sql_data
+
+    - name: print
+      ansible.builtin.debug:
+        var: sql_data

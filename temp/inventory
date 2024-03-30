@@ -1,0 +1,12 @@
+[server-A]
+192.168.0.24
+
+[server-B]
+192.168.0.199 ansible_connection=ssh ansible_ssh_user=mintdocker ansible_ssh_pass=85221
+
+[server-C]
+192.168.0.31 ansible_connection=ssh ansible_ssh_user=linuxmini1 ansible_ssh_pass=85221
+
+[app]
+mintdockerVM ansible_connection=ssh ansible_ssh_user=mintdocker ansible_ssh_pass=85221
+192.168.0.31 ansible_connection=ssh ansible_ssh_user=linuxmini1 ansible_ssh_pass=85221

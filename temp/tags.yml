@@ -1,0 +1,18 @@
+#ansible-playbook  pb1.yml -v
+#ansible-playbook --tags tag1 pb1.yml -v
+---
+- name: task Demo
+  hosts: localhost
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+  tasks:
+    - name: example1
+      ansible.builtin.debug:
+       msg: "example1"
+      tags: tag1
+
+    - name: example2
+      ansible.builtin.debug:
+       msg: "example2"
+      tags: tag2

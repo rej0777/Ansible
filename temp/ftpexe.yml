@@ -1,0 +1,16 @@
+---
+- name: selecterFillter
+  hosts: localhost
+  gather_facts: true
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+  tasks:
+    - name: execute
+      script: ftp1.py
+      become: true
+      become_user: rej
+
+    - name: mylog
+      ansible.builtin.debug:
+        msg: "wykonanw"

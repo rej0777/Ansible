@@ -1,0 +1,23 @@
+---
+- name: task Demo
+  hosts: localhost
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+  tasks:
+   - name: Use connect_params to add any additional connection parameters that libpg supports
+     community.postgresql.postgresql_query:
+      connect_params:
+       target_session_attrs: read-write
+       connect_timeout: 10
+      login_host: "192.168.0.24,192.168.0.199"
+      login_user: "postgres"
+      login_password: "12345"
+      db: 'postgres'
+      query: 'SELECT version()'
+      register: sql_data
+      
+   - name: print
+     ansible.builtin.debug:
+      var: sql_data  
+       

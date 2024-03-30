@@ -1,0 +1,28 @@
+---
+- name: date_time_demp
+  hosts: localhost
+  gather_facts: true
+  vars:
+    ansible_connection: local
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+  tasks:
+    - name: DateTime_1
+      ansible.builtin.debug:
+       var: ansible_date_time
+
+    - name: ISO08601
+      ansible.builtin.debug:
+       var: ansible_date_time.iso8601
+    
+    - name: DateTime2
+      ansible.builtin.debug:
+       msg: "{{lookup('pipe', 'date +%Y-%m-%d@$H:%M:%S')}}"
+
+    - name: iso8601 manual
+      ansible.builtin.debug:
+       msg: "{{lookup('pipe', 'date +%Y-%m-%dT%H:%M:%S')}}"
+
+    - name: iso8601
+      ansible.builtin.debug:
+       msg: "{{lookup('pipe', 'date --iso8601=seconds')}}"
+      ignore_errors: true

@@ -1,0 +1,19 @@
+---
+- name: Search String with lineinfile
+  hosts: server-B
+
+  tasks:
+    - name: Ensure /tmp/my.conf contains 127.0.0.1
+      lineinfile:
+        path: /tmp/my.conf
+        regexp: '^127\.0\.0\.1.*whatever'
+        state: absent
+      check_mode: yes
+      changed_when: false
+      register: out
+    - debug:
+        msg: "Yes, line exists."
+      when: out.found
+    - debug:
+        msg: "Line does NOT exist."
+      when: not out.found

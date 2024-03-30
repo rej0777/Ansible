@@ -1,0 +1,11 @@
+---
+- hosts: app
+  tasks:
+    - name: Fetch the file from the mwiapp01 to master
+      run_once: yes
+      fetch: src=/home/linuxmini1/temp/test2.zip dest=/buffer/ flat=yes
+      when: "{{ ansible_hostname == '192.168.0.31' }}"
+
+    - name: Copy the file from master to mwiapp02
+      copy: src=buffer/test2.zip dest=/home/mintdocker/tmp/
+      when: "{{ ansible_hostname == 'mintdockerVM' }}"

@@ -1,0 +1,47 @@
+---
+ - hosts: app
+   tasks:
+     - name: Fetch the file from the mwiapp01 to master
+       run_once: yes
+       fetch: src=/tmp/app01-to-app02.jar dest=buffer/ flat=yes
+       when: "{{ inventory_hostname == 'mwiapp01' }}"
+
+     - name: Copy the file from master to mwiapp02
+       copy: src=buffer/app01-to-app02.jar dest=/tmp/
+       when: "{{ inventory_hostname == 'mwiapp02' }}"
+
+
+----------------
+---
+- name: Sync Pull task - Executed on  the Destination host "{{groups['app'][1]}}"
+  hosts: "{{groups['app'][0]}}"
+  user: wlsusr
+  tasks:   
+    - name: Copy the file from mwiapp01 to mwiapp02 using Method Pull
+      tags: sync-pull
+      synchronize:
+        src: "{{ item }}"
+        dest: "{{ item }}"
+        mode: pull
+      delegate_to: "{{groups['app'][1]}}"
+      register: syncfile
+      run_once: true
+      with_items:
+       - "/tmp/app01-to-app02.jar"
+
+----------------
+- name: Sync Push task - Executed on source host "{{groups['app'][0]}}"
+  hosts: "{{groups['app'][1]}}" 
+  user: wlsusr
+  tasks:
+    - name: Copy the file from mwiapp01 to mwiapp02 using Method Push
+      tags: sync-push
+      synchronize:
+        src: "{{ item }}"
+        dest: "{{ item }}"
+        mode: push
+      delegate_to: "{{groups['app'][0]}}"
+      register: syncfile
+      with_items:
+       - "/tmp/app01-to-app02.jar"
+

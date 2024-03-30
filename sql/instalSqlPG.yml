@@ -1,0 +1,10 @@
+---
+- name: postgres sqlDemo
+  hosts: all
+  become: true
+  tasks:
+    - name install packages
+      ansible.builtin.yum:
+       name:
+        -postgres
+      
